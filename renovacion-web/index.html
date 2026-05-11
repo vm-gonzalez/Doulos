@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Limpiando Tu Mente</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
     <div class="container">
@@ -40,6 +43,19 @@
     </div>
 
     <script>
+        // Registrar el Service Worker para uso offline
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registrado con éxito');
+                    })
+                    .catch(err => {
+                        console.log('Error al registrar el ServiceWorker', err);
+                    });
+            });
+        }
+
         // Inicializar variables desde localStorage
         let currentDay = parseInt(localStorage.getItem('verseDay')) || 1;
         let completions = parseInt(localStorage.getItem('verseCompletions')) || 0;
