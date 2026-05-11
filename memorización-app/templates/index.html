@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renovación | 30 Días</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Día <span id="day-number">1</span> de 30</h1>
+            <p class="subtitle">Renovando la mente, un día a la vez.</p>
+        </header>
+
+        <main class="verse-card">
+            <h2 id="verse-ref">Cargando...</h2>
+            <p id="verse-text" class="verse-text">Conectando con la API...</p>
+        </main>
+
+        <div class="controls">
+            <button id="btn-prev" onclick="changeDay(-1)">Anterior</button>
+            <button id="btn-next" onclick="changeDay(1)">Siguiente / Ya lo memoricé</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
+        </div>
+    </div>
+
+    <script>
+        // Recuperar el día actual de la memoria del navegador, o empezar en el día 1
+        let currentDay = parseInt(localStorage.getItem('verseDay')) || 1;
+
+        function fetchVerse(day) {
+            // Consumir tu propia API hecha en Python
+            fetch(`/api/verse/${day}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("¡Has completado los 30 días!");
+                        currentDay = 30; // Evitar que siga subiendo
+                    } else {
+                        document.getElementById('day-number').innerText = data.day;
+                        document.getElementById('verse-ref').innerText = data.data.cita;
+                        document.getElementById('verse-text').innerText = `"${data.data.texto}"`;
+                        updateProgress(day);
+                    }
+                })
+                .catch(error => console.error('Error fetching verse:', error));
+        }
+
+        function changeDay(step) {
+            let newDay = currentDay + step;
+            if (newDay >= 1 && newDay <= 30) {
+                currentDay = newDay;
+                localStorage.setItem('verseDay', currentDay); // Guardar progreso
+                fetchVerse(currentDay);
+            }
+        }
+
+        function updateProgress(day) {
+            const percentage = (day / 30) * 100;
+            document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        // Cargar el versículo inicial al abrir la página
+        fetchVerse(currentDay);
+    </script>
+</body>
+</html>
