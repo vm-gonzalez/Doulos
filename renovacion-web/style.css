@@ -182,3 +182,11 @@ button:disabled:hover {
     color: #4CAF50;
     text-decoration: underline;
 }
+
+.blurred-text {
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}
+.blurred-text:hover {
+    filter: blur(0px); /* Para espiar si se les olvida una palabra */
+}

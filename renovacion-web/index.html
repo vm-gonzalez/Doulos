@@ -32,6 +32,10 @@
             <div class="progress-bar">
                 <div id="progress" class="progress"></div>
             </div>
+
+            <button onclick="toggleBlur()" style="margin-bottom: 15px; background: #555; padding: 5px 10px; font-size: 0.8rem;">
+                Ocultar texto (Modo Prueba)
+            </button>
         </div>
 
         <div id="congrats-view" style="display: none;">
@@ -164,6 +168,11 @@
         function updateProgress(day) {
             const percentage = (day / 30) * 100;
             document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        function toggleBlur() {
+            const verseText = document.getElementById('verse-text');
+            verseText.classList.toggle('blurred-text');
         }
 
         // Iniciar la app cargando el día actual
