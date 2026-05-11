@@ -163,3 +163,22 @@ button:disabled:hover {
         font-size: 1rem;
     }
 }
+
+/* Atribución del ícono */
+.attribution {
+    margin-top: 25px;
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+}
+
+.attribution a {
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.attribution a:hover {
+    color: #4CAF50;
+    text-decoration: underline;
+}
