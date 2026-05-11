@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiando Tu Mente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Día <span id="day-number">1</span> de 30</h1>
+            <p class="subtitle">Limpiando tu mente, un día a la vez.</p>
+            <div class="badge">Has completado el reto <span id="completion-counter">0</span> veces</div>
+        </header>
+
+        <div id="learning-view">
+            <main class="verse-card">
+                <h2 id="verse-ref">Cargando...</h2>
+                <p id="verse-text" class="verse-text">Conectando con la base de datos...</p>
+            </main>
+
+            <div class="controls">
+                <button id="btn-prev" onclick="changeDay(-1)">Anterior</button>
+                <button id="btn-next" onclick="handleNext()">Siguiente / Memorizado</button>
+            </div>
+            
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+        </div>
+
+        <div id="congrats-view" style="display: none;">
+            <main class="verse-card congrats-card">
+                <h2>¡Felicidades! 🎉</h2>
+                <p class="verse-text">Has completado los 30 días de renovación mental. La constancia es clave en esta lucha.</p>
+                <button onclick="restartChallenge()" class="btn-restart">Volver a empezar (Día 1)</button>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar variables desde localStorage
+        let currentDay = parseInt(localStorage.getItem('verseDay')) || 1;
+        let completions = parseInt(localStorage.getItem('verseCompletions')) || 0;
+
+        // Mostrar contador inicial
+        document.getElementById('completion-counter').innerText = completions;
+
+        function fetchVerse(day) {
+            // Leemos el archivo JSON directamente (ideal para Netlify)
+            fetch('verses.json')
+                .then(response => response.json())
+                .then(data => {
+                    let dayStr = day.toString();
+                    
+                    if (data[dayStr]) {
+                        // Si el día existe en el JSON
+                        document.getElementById('day-number').innerText = day;
+                        document.getElementById('verse-ref').innerText = data[dayStr].cita;
+                        document.getElementById('verse-text').innerText = `"${data[dayStr].texto}"`;
+                        updateProgress(day);
+                        updateButtons(day);
+                    } else {
+                        // Autocorrección si hay un error en la memoria
+                        console.warn("Día no encontrado, corrigiendo memoria...");
+                        currentDay = 1;
+                        localStorage.setItem('verseDay', currentDay);
+                        fetchVerse(currentDay);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching verse:', error);
+                    document.getElementById('verse-text').innerText = "Error cargando los versículos. Verifica que verses.json esté en la misma carpeta.";
+                });
+        }
+
+        function updateButtons(day) {
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            
+            // Desactivar botón "Anterior" si estamos en el día 1
+            btnPrev.disabled = (day === 1);
+
+            // Cambiar texto y color del botón si es el último día
+            if (day === 30) {
+                btnNext.innerText = "¡Completar Reto!";
+                btnNext.classList.add('btn-finish');
+            } else {
+                btnNext.innerText = "Siguiente / Memorizado";
+                btnNext.classList.remove('btn-finish');
+            }
+        }
+
+        function handleNext() {
+            if (currentDay === 30) {
+                showCongrats();
+            } else {
+                changeDay(1);
+            }
+        }
+
+        function changeDay(step) {
+            let newDay = currentDay + step;
+            if (newDay >= 1 && newDay <= 30) {
+                currentDay = newDay;
+                localStorage.setItem('verseDay', currentDay);
+                fetchVerse(currentDay);
+            }
+        }
+
+        function showCongrats() {
+            // Cambiar de vista
+            document.getElementById('learning-view').style.display = 'none';
+            document.getElementById('congrats-view').style.display = 'block';
+            
+            // Sumar al contador y guardar
+            completions++;
+            localStorage.setItem('verseCompletions', completions);
+            document.getElementById('completion-counter').innerText = completions;
+        }
+
+        function restartChallenge() {
+            // Reiniciar al día 1
+            currentDay = 1;
+            localStorage.setItem('verseDay', currentDay);
+            
+            // Restaurar vistas
+            document.getElementById('congrats-view').style.display = 'none';
+            document.getElementById('learning-view').style.display = 'block';
+            
+            fetchVerse(currentDay);
+        }
+
+        function updateProgress(day) {
+            const percentage = (day / 30) * 100;
+            document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        // Iniciar la app cargando el día actual
+        fetchVerse(currentDay);
+    </script>
+</body>
+</html>
