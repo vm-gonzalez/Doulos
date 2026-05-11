@@ -89,3 +89,55 @@ button:hover { background: #444; }
     width: 0%;
     transition: width 0.4s ease;
 }
+
+/* Estilos para el contador de rachas */
+.badge {
+    display: inline-block;
+    background: #333;
+    color: #4CAF50;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Estilo para botón deshabilitado (Día 1) */
+button:disabled {
+    background: #222;
+    color: #555;
+    cursor: not-allowed;
+}
+button:disabled:hover {
+    background: #222;
+}
+
+/* Clases dinámicas para el último día y reinicio */
+.btn-finish {
+    background: #FF9800 !important; /* Un color naranja para destacar que es el final */
+    color: #fff !important;
+}
+.btn-finish:hover {
+    background: #e68a00 !important;
+}
+
+.btn-restart {
+    background: #4CAF50;
+    color: #121212;
+    margin-top: 20px;
+    width: 100%;
+}
+.btn-restart:hover {
+    background: #45a049;
+}
+
+.congrats-card {
+    text-align: center;
+    border-left: none;
+    border-top: 4px solid #FF9800;
+}
+
+.congrats-card h2 {
+    color: #FF9800;
+    margin-bottom: 15px;
+}
