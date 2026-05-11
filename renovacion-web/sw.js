@@ -1,4 +1,4 @@
-const CACHE_NAME = 'renovacion-v1';
+const CACHE_NAME = 'renovacion-v2';
 // Archivos que se guardarán en la memoria del celular
 const urlsToCache = [
     './',
