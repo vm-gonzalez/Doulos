@@ -1,5 +1,5 @@
 // IMPORTANTE: Cambia el número de esta versión (v3, v4, v5...) cada vez que subas cambios a GitHub
-const CACHE_NAME = 'renovacion-v7'; 
+const CACHE_NAME = 'renovacion-v8'; 
 
 const urlsToCache = [
     './',
