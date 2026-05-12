@@ -154,7 +154,7 @@ button:disabled:hover {
     .verse-text { font-size: 1rem; }
     
     .controls {
-        flex-direction: column; /* Apila los botones uno sobre otro */
+        flex-direction: column;
     }
     
     button {
@@ -183,10 +183,43 @@ button:disabled:hover {
     text-decoration: underline;
 }
 
+/* --- Modo Prueba (Blur) --- */
 .blurred-text {
     filter: blur(5px);
     transition: filter 0.3s ease;
 }
 .blurred-text:hover {
     filter: blur(0px); /* Para espiar si se les olvida una palabra */
+}
+
+/* --- Botón de Ícono (Ojo) --- */
+.icon-btn {
+    background: transparent;
+    color: #888;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.icon-btn svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.icon-btn:hover {
+    background: #2a2a2a; /* Fondo sutil al hacer hover */
+    color: #e0e0e0;
+}
+
+.icon-btn:hover svg {
+    transform: scale(1.15); /* Animación de aumento de tamaño */
 }

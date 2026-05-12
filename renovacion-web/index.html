@@ -29,21 +29,16 @@
                 <button id="btn-next" onclick="handleNext()">Siguiente / Memorizado</button>
             </div>
             
-            <div class="progress-bar">
+            <div class="progress-bar" style="margin-bottom: 20px;">
                 <div id="progress" class="progress"></div>
             </div>
 
-            <button onclick="toggleBlur()" style="margin-bottom: 15px; background: #555; padding: 5px 10px; font-size: 0.8rem;">
-                Ocultar texto (Modo Prueba)
+            <button id="btn-blur" class="icon-btn" onclick="toggleBlur()" title="Ocultar/Mostrar texto (Modo Prueba)">
+                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
             </button>
-        </div>
-
-        <div id="congrats-view" style="display: none;">
-            <main class="verse-card congrats-card">
-                <h2>¡Felicidades! 🎉</h2>
-                <p class="verse-text">Has completado los 30 días de renovación mental. La constancia es clave en esta lucha.</p>
-                <button onclick="restartChallenge()" class="btn-restart">Volver a empezar (Día 1)</button>
-            </main>
         </div>
 
         <div id="congrats-view" style="display: none;">
@@ -81,21 +76,23 @@
         document.getElementById('completion-counter').innerText = completions;
 
         function fetchVerse(day) {
-            // Leemos el archivo JSON directamente (ideal para Netlify)
             fetch('verses.json')
                 .then(response => response.json())
                 .then(data => {
                     let dayStr = day.toString();
                     
                     if (data[dayStr]) {
-                        // Si el día existe en el JSON
                         document.getElementById('day-number').innerText = day;
                         document.getElementById('verse-ref').innerText = data[dayStr].cita;
                         document.getElementById('verse-text').innerText = `"${data[dayStr].texto}"`;
+                        
+                        // Asegurarnos de que el texto no empiece borroso al cambiar de día
+                        document.getElementById('verse-text').classList.remove('blurred-text');
+                        resetEyeIcon(); 
+
                         updateProgress(day);
                         updateButtons(day);
                     } else {
-                        // Autocorrección si hay un error en la memoria
                         console.warn("Día no encontrado, corrigiendo memoria...");
                         currentDay = 1;
                         localStorage.setItem('verseDay', currentDay);
@@ -112,10 +109,8 @@
             const btnPrev = document.getElementById('btn-prev');
             const btnNext = document.getElementById('btn-next');
             
-            // Desactivar botón "Anterior" si estamos en el día 1
             btnPrev.disabled = (day === 1);
 
-            // Cambiar texto y color del botón si es el último día
             if (day === 30) {
                 btnNext.innerText = "¡Completar Reto!";
                 btnNext.classList.add('btn-finish');
@@ -143,22 +138,18 @@
         }
 
         function showCongrats() {
-            // Cambiar de vista
             document.getElementById('learning-view').style.display = 'none';
             document.getElementById('congrats-view').style.display = 'block';
             
-            // Sumar al contador y guardar
             completions++;
             localStorage.setItem('verseCompletions', completions);
             document.getElementById('completion-counter').innerText = completions;
         }
 
         function restartChallenge() {
-            // Reiniciar al día 1
             currentDay = 1;
             localStorage.setItem('verseDay', currentDay);
             
-            // Restaurar vistas
             document.getElementById('congrats-view').style.display = 'none';
             document.getElementById('learning-view').style.display = 'block';
             
@@ -172,7 +163,31 @@
 
         function toggleBlur() {
             const verseText = document.getElementById('verse-text');
+            const eyeIcon = document.getElementById('eye-icon');
+            
             verseText.classList.toggle('blurred-text');
+
+            // Cambiar el ícono dependiendo de si está borroso o no
+            if (verseText.classList.contains('blurred-text')) {
+                // Ojo cerrado / tachado
+                eyeIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                `;
+                document.getElementById('btn-blur').style.color = '#4CAF50'; // Darle color activo
+            } else {
+                resetEyeIcon();
+            }
+        }
+
+        function resetEyeIcon() {
+            const eyeIcon = document.getElementById('eye-icon');
+            // Ojo abierto normal
+            eyeIcon.innerHTML = `
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            `;
+            document.getElementById('btn-blur').style.color = '#888'; // Color inactivo
         }
 
         // Iniciar la app cargando el día actual
