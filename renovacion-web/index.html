@@ -18,7 +18,7 @@
                 <div class="header-top">
                     <div class="spacer"></div> 
                     
-                    <h1>Día <span id="day-number">1</span> de 30</h1>
+                    <h1>Día <span id="day-number">1</span> de <span id="total-days-label">30</span></h1>
                     
                     <button class="settings-trigger" onclick="toggleSettings()" title="Ajustes">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -28,7 +28,7 @@
                     </button>
                 </div>
 
-                <p class="subtitle">Limpiando tu mente, un día a la vez.</p>
+                <p class="subtitle" id="current-challenge-title">Cargando reto...</p>
                 <div class="badge">Has completado el reto <span id="completion-counter">0</span> veces</div>
             </header>
 
@@ -60,6 +60,12 @@
             <h2>Configuración</h2>
             
             <div class="setting-item">
+                <label>Área a combatir</label>
+                <select id="category-select" class="category-dropdown" onchange="changeCategory(this.value)">
+                    </select>
+            </div>
+
+            <div class="setting-item">
                 <label>Tema (Claro / Oscuro)</label>
                 <div class="mode-selector">
                     <button id="mode-dark" class="mode-btn" onclick="setMode('dark')">Oscuro</button>
@@ -82,7 +88,7 @@
         <div id="congrats-view" style="display: none;">
             <main class="verse-card congrats-card">
                 <h2>¡Felicidades! 🎉</h2>
-                <p class="verse-text">Has completado los 30 días de renovación mental. La constancia es clave en esta lucha.</p>
+                <p id="congrats-text" class="verse-text">Has completado los días de renovación mental. La constancia es clave en esta lucha.</p>
                 <button onclick="restartChallenge()" class="btn-restart">Volver a empezar (Día 1)</button>
             </main>
         </div>
@@ -101,10 +107,12 @@
         }
 
         // Variables de estado
-        let currentDay = parseInt(localStorage.getItem('verseDay')) || 1;
-        let completions = parseInt(localStorage.getItem('verseCompletions')) || 0;
+        let currentCategory = localStorage.getItem('verseCategory') || 'sexualidad';
+        let currentDay = parseInt(localStorage.getItem(`verseDay_${currentCategory}`)) || 1;
+        let completions = parseInt(localStorage.getItem(`verseCompletions_${currentCategory}`)) || 0;
         let currentMode = localStorage.getItem('appMode') || 'dark';
         let currentPalette = localStorage.getItem('appPalette') || 'default';
+        let totalDays = 30;
 
         // Inicialización
         function initApp() {
@@ -118,11 +126,30 @@
             fetch('verses.json')
                 .then(response => response.json())
                 .then(data => {
+                    // Poblar el selector si está vacío
+                    const select = document.getElementById('category-select');
+                    if (select.options.length === 0) {
+                        for (const key in data) {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = data[key].nombre;
+                            if (key === currentCategory) option.selected = true;
+                            select.appendChild(option);
+                        }
+                    }
+
+                    const categoryData = data[currentCategory];
+                    const verses = categoryData.versos;
+                    totalDays = Object.keys(verses).length;
+                    
+                    document.getElementById('current-challenge-title').innerText = `Luchando contra: ${categoryData.nombre}`;
+                    document.getElementById('total-days-label').innerText = totalDays;
+
                     let dayStr = day.toString();
-                    if (data[dayStr]) {
+                    if (verses[dayStr]) {
                         document.getElementById('day-number').innerText = day;
-                        document.getElementById('verse-ref').innerText = data[dayStr].cita;
-                        document.getElementById('verse-text').innerText = `"${data[dayStr].texto}"`;
+                        document.getElementById('verse-ref').innerText = verses[dayStr].cita;
+                        document.getElementById('verse-text').innerText = `"${verses[dayStr].texto}"`;
                         document.getElementById('verse-text').classList.remove('blurred-text');
                         resetEyeIcon(); 
                         updateProgress(day);
@@ -133,6 +160,19 @@
                     }
                 })
                 .catch(err => console.error('Error cargando versos:', err));
+        }
+
+        function changeCategory(newCategory) {
+            currentCategory = newCategory;
+            localStorage.setItem('verseCategory', currentCategory);
+            
+            // Cargar progreso específico
+            currentDay = parseInt(localStorage.getItem(`verseDay_${currentCategory}`)) || 1;
+            completions = parseInt(localStorage.getItem(`verseCompletions_${currentCategory}`)) || 0;
+            
+            document.getElementById('completion-counter').innerText = completions;
+            fetchVerse(currentDay);
+            toggleSettings(); 
         }
 
         function setMode(mode) {
@@ -177,25 +217,25 @@
             const btnNext = document.getElementById('btn-next');
             btnPrev.disabled = (day === 1);
             
-            if (day === 30) {
+            if (day === totalDays) {
                 btnNext.innerText = "¡Completar!";
                 btnNext.classList.add('btn-finish');
             } else {
-                btnNext.innerText = ">"; // Flecha simple para ocupar una sola línea
+                btnNext.innerText = ">"; 
                 btnNext.classList.remove('btn-finish');
             }
         }
 
         function handleNext() {
-            if (currentDay === 30) showCongrats();
+            if (currentDay === totalDays) showCongrats();
             else changeDay(1);
         }
 
         function changeDay(step) {
             let newDay = currentDay + step;
-            if (newDay >= 1 && newDay <= 30) {
+            if (newDay >= 1 && newDay <= totalDays) {
                 currentDay = newDay;
-                localStorage.setItem('verseDay', currentDay);
+                localStorage.setItem(`verseDay_${currentCategory}`, currentDay);
                 fetchVerse(currentDay);
             }
         }
@@ -204,20 +244,20 @@
             document.getElementById('learning-view').style.display = 'none';
             document.getElementById('congrats-view').style.display = 'block';
             completions++;
-            localStorage.setItem('verseCompletions', completions);
+            localStorage.setItem(`verseCompletions_${currentCategory}`, completions);
             document.getElementById('completion-counter').innerText = completions;
         }
 
         function restartChallenge() {
             currentDay = 1;
-            localStorage.setItem('verseDay', 1);
+            localStorage.setItem(`verseDay_${currentCategory}`, 1);
             document.getElementById('congrats-view').style.display = 'none';
             document.getElementById('learning-view').style.display = 'block';
             fetchVerse(1);
         }
 
         function updateProgress(day) {
-            document.getElementById('progress').style.width = (day / 30 * 100) + '%';
+            document.getElementById('progress').style.width = (day / totalDays * 100) + '%';
         }
 
         function toggleBlur() {

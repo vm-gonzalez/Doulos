@@ -283,6 +283,24 @@ button:disabled {
 
 .btn-back { width: 100%; margin-top: 15px; font-size: 1rem; }
 
+/* --- Estilos para el selector de categoría --- */
+.category-dropdown {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-verse);
+    color: var(--text-main);
+    border: 2px solid var(--btn-bg);
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.category-dropdown:focus {
+    border-color: var(--primary-color);
+}
+
 /* --- Footer / Atribución --- */
 .attribution { 
     margin-top: 25px; 
@@ -308,6 +326,5 @@ button:disabled {
 @media (max-width: 600px) {
     .container { width: 95%; padding: 25px 20px; }
     h1 { font-size: 1.5rem; }
-    /* Eliminada la regla que apilaba los controles, ahora siempre están en una línea */
     button { padding: 15px; }
 }
