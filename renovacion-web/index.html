@@ -6,22 +6,29 @@
     <title>Limpiando Tu Mente</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4CAF50">
+    <meta name="theme-color" id="theme-meta" content="#4CAF50">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/png" href="icon-192.png">
 </head>
-<body>
+<body data-theme="default">
     <div class="container">
-        <header>
-            <h1>Día <span id="day-number">1</span> de 30</h1>
-            <p class="subtitle">Limpiando tu mente, un día a la vez.</p>
-            <div class="badge">Has completado el reto <span id="completion-counter">0</span> veces</div>
-        </header>
+        <button class="settings-trigger" onclick="toggleSettings()" title="Ajustes">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
 
         <div id="learning-view">
+            <header>
+                <h1>Día <span id="day-number">1</span> de 30</h1>
+                <p class="subtitle">Limpiando tu mente, un día a la vez.</p>
+                <div class="badge">Has completado el reto <span id="completion-counter">0</span> veces</div>
+            </header>
+
             <main class="verse-card">
                 <h2 id="verse-ref">Cargando...</h2>
-                <p id="verse-text" class="verse-text">Conectando con la base de datos...</p>
+                <p id="verse-text" class="verse-text">Cargando versículo...</p>
             </main>
 
             <div class="controls">
@@ -33,7 +40,7 @@
                 <div id="progress" class="progress"></div>
             </div>
 
-            <button id="btn-blur" class="icon-btn" onclick="toggleBlur()" title="Ocultar/Mostrar texto (Modo Prueba)">
+            <button id="btn-blur" class="icon-btn" onclick="toggleBlur()" title="Ocultar/Mostrar texto">
                 <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
@@ -41,11 +48,26 @@
             </button>
         </div>
 
+        <div id="settings-view" class="settings-view" style="display: none;">
+            <h2>Configuración</h2>
+            
+            <div class="setting-item">
+                <label>Paleta de colores</label>
+                <div class="theme-options">
+                    <button class="theme-btn btn-green" onclick="setTheme('default')" title="Verde (Original)"></button>
+                    <button class="theme-btn btn-pink" onclick="setTheme('women')" title="Rosa (Mujeres)"></button>
+                    <button class="theme-btn btn-blue" onclick="setTheme('unisex')" title="Azul (Unisex)"></button>
+                </div>
+            </div>
+
+            <button class="btn-back" onclick="toggleSettings()">Volver</button>
+        </div>
+
         <div id="congrats-view" style="display: none;">
             <main class="verse-card congrats-card">
                 <h2>¡Felicidades! 🎉</h2>
-                <p class="verse-text">Has completado los 30 días de renovación mental. La constancia es clave en esta lucha.</p>
-                <button onclick="restartChallenge()" class="btn-restart">Volver a empezar (Día 1)</button>
+                <p class="verse-text">Has completado los 30 días de renovación mental.</p>
+                <button onclick="restartChallenge()" class="btn-restart">Volver a empezar</button>
             </main>
         </div>
 
@@ -55,24 +77,19 @@
     </div>
 
     <script>
-        // Registrar el Service Worker para uso offline
+        // Registrar Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registrado con éxito');
-                    })
-                    .catch(err => {
-                        console.log('Error al registrar el ServiceWorker', err);
-                    });
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('Error SW', err));
             });
         }
 
-        // Inicializar variables desde localStorage
         let currentDay = parseInt(localStorage.getItem('verseDay')) || 1;
         let completions = parseInt(localStorage.getItem('verseCompletions')) || 0;
+        let currentTheme = localStorage.getItem('appTheme') || 'default';
 
-        // Mostrar contador inicial
+        // Aplicar tema guardado al iniciar
+        setTheme(currentTheme);
         document.getElementById('completion-counter').innerText = completions;
 
         function fetchVerse(day) {
@@ -80,52 +97,63 @@
                 .then(response => response.json())
                 .then(data => {
                     let dayStr = day.toString();
-                    
                     if (data[dayStr]) {
                         document.getElementById('day-number').innerText = day;
                         document.getElementById('verse-ref').innerText = data[dayStr].cita;
                         document.getElementById('verse-text').innerText = `"${data[dayStr].texto}"`;
-                        
-                        // Asegurarnos de que el texto no empiece borroso al cambiar de día
                         document.getElementById('verse-text').classList.remove('blurred-text');
                         resetEyeIcon(); 
-
                         updateProgress(day);
                         updateButtons(day);
-                    } else {
-                        console.warn("Día no encontrado, corrigiendo memoria...");
-                        currentDay = 1;
-                        localStorage.setItem('verseDay', currentDay);
-                        fetchVerse(currentDay);
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching verse:', error);
-                    document.getElementById('verse-text').innerText = "Error cargando los versículos. Verifica que verses.json esté en la misma carpeta.";
                 });
         }
 
-        function updateButtons(day) {
-            const btnPrev = document.getElementById('btn-prev');
-            const btnNext = document.getElementById('btn-next');
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('appTheme', theme);
             
-            btnPrev.disabled = (day === 1);
+            // Actualizar color de la barra del navegador (meta tag)
+            const metaColor = {
+                'default': '#4CAF50',
+                'women': '#f06292',
+                'unisex': '#2196f3'
+            };
+            document.getElementById('theme-meta').setAttribute('content', metaColor[theme]);
 
-            if (day === 30) {
-                btnNext.innerText = "¡Completar Reto!";
-                btnNext.classList.add('btn-finish');
+            // Marcar botón activo en ajustes
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.btn-${theme === 'default' ? 'green' : theme === 'women' ? 'pink' : 'blue'}`);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
+        function toggleSettings() {
+            const learning = document.getElementById('learning-view');
+            const settings = document.getElementById('settings-view');
+            const congrats = document.getElementById('congrats-view');
+
+            if (settings.style.display === 'none') {
+                learning.style.display = 'none';
+                congrats.style.display = 'none';
+                settings.style.display = 'block';
             } else {
-                btnNext.innerText = "Siguiente / Memorizado";
-                btnNext.classList.remove('btn-finish');
+                settings.style.display = 'none';
+                learning.style.display = 'block';
             }
         }
 
+        // --- Resto de funciones existentes ---
+        function updateButtons(day) {
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            btnPrev.disabled = (day === 1);
+            btnNext.innerText = (day === 30) ? "¡Completar Reto!" : "Siguiente / Memorizado";
+        }
+
         function handleNext() {
-            if (currentDay === 30) {
-                showCongrats();
-            } else {
-                changeDay(1);
-            }
+            if (currentDay === 30) showCongrats();
+            else changeDay(1);
         }
 
         function changeDay(step) {
@@ -140,7 +168,6 @@
         function showCongrats() {
             document.getElementById('learning-view').style.display = 'none';
             document.getElementById('congrats-view').style.display = 'block';
-            
             completions++;
             localStorage.setItem('verseCompletions', completions);
             document.getElementById('completion-counter').innerText = completions;
@@ -148,49 +175,31 @@
 
         function restartChallenge() {
             currentDay = 1;
-            localStorage.setItem('verseDay', currentDay);
-            
+            localStorage.setItem('verseDay', 1);
             document.getElementById('congrats-view').style.display = 'none';
             document.getElementById('learning-view').style.display = 'block';
-            
-            fetchVerse(currentDay);
+            fetchVerse(1);
         }
 
         function updateProgress(day) {
-            const percentage = (day / 30) * 100;
-            document.getElementById('progress').style.width = percentage + '%';
+            document.getElementById('progress').style.width = (day / 30 * 100) + '%';
         }
 
         function toggleBlur() {
-            const verseText = document.getElementById('verse-text');
-            const eyeIcon = document.getElementById('eye-icon');
-            
-            verseText.classList.toggle('blurred-text');
-
-            // Cambiar el ícono dependiendo de si está borroso o no
-            if (verseText.classList.contains('blurred-text')) {
-                // Ojo cerrado / tachado
-                eyeIcon.innerHTML = `
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                `;
-                document.getElementById('btn-blur').style.color = '#4CAF50'; // Darle color activo
+            const vt = document.getElementById('verse-text');
+            const icon = document.getElementById('eye-icon');
+            vt.classList.toggle('blurred-text');
+            if (vt.classList.contains('blurred-text')) {
+                icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
             } else {
                 resetEyeIcon();
             }
         }
 
         function resetEyeIcon() {
-            const eyeIcon = document.getElementById('eye-icon');
-            // Ojo abierto normal
-            eyeIcon.innerHTML = `
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            `;
-            document.getElementById('btn-blur').style.color = '#888'; // Color inactivo
+            document.getElementById('eye-icon').innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
         }
 
-        // Iniciar la app cargando el día actual
         fetchVerse(currentDay);
     </script>
 </body>
