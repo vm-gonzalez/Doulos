@@ -1,6 +1,6 @@
 /* --- Variables para los Temas (Original + Claro) --- */
 :root {
-    /* Modo Oscuro (Tu diseño original intacto) */
+    /* Modo Oscuro */
     --bg-body: #121212;
     --bg-container: #1e1e1e;
     --bg-verse: #2c2c2c;
@@ -71,31 +71,45 @@ body {
     width: 90%;
     text-align: center;
     background: var(--bg-container);
-    /* Padding asimétrico: más espacio arriba para la ruedita */
-    padding: 40px 30px 30px 30px; 
+    padding: 30px; 
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s;
-    position: relative; /* CLAVE: Ancla la ruedita a los bordes de esta caja */
+    position: relative;
 }
 
-/* Cabecera */
+/* Cabecera con Flexbox para posicionar la rueda */
 header {
     margin-bottom: 20px;
 }
 
-/* Rueda de Ajustes perfectamente en la esquina */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+/* El spacer ayuda a que el h1 quede centrado aunque la rueda esté a la derecha */
+.spacer {
+    width: 34px; 
+}
+
+h1 { 
+    color: var(--text-main); 
+    font-size: 1.8rem; 
+    line-height: 1.2; 
+    margin: 0;
+    flex-grow: 1;
+}
+
 .settings-trigger {
-    position: absolute;
-    top: 15px;
-    right: 15px;
     background: transparent;
     border: none;
     color: var(--text-muted);
     cursor: pointer;
     padding: 5px;
     transition: transform 0.3s ease, color 0.2s;
-    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,7 +125,6 @@ header {
     height: 24px;
 }
 
-h1 { color: var(--text-main); font-size: 1.8rem; line-height: 1.2; }
 .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
 .badge {
@@ -170,7 +183,6 @@ button {
 
 button:hover { background: var(--btn-hover); }
 
-/* Botón Siguiente / Memorizado */
 #btn-next, .btn-restart { 
     background: var(--primary-color); 
     color: var(--text-on-primary); 
@@ -185,27 +197,10 @@ button:disabled {
     cursor: not-allowed;
 }
 
-button:disabled:hover {
-    background: var(--btn-disabled);
-}
-
 .btn-finish {
     background: #FF9800 !important;
     color: #fff !important;
 }
-.btn-finish:hover {
-    background: #e68a00 !important;
-}
-
-.btn-restart { margin-top: 20px; width: 100%; }
-
-/* Tarjeta de Victoria */
-.congrats-card {
-    text-align: center;
-    border-left: none;
-    border-top: 4px solid #FF9800;
-}
-.congrats-card h2 { color: #FF9800; margin-bottom: 15px; }
 
 /* Barra de Progreso */
 .progress-bar {
@@ -223,7 +218,7 @@ button:disabled:hover {
     transition: width 0.4s ease;
 }
 
-/* --- Botón del Ojo --- */
+/* Botón del Ojo */
 .icon-btn {
     background: transparent;
     color: var(--text-muted);
@@ -239,65 +234,32 @@ button:disabled:hover {
     align-items: center;
 }
 
-.icon-btn svg { width: 24px; height: 24px; transition: transform 0.3s ease; }
-.icon-btn:hover { background: var(--btn-bg); color: var(--text-main); }
-.icon-btn:hover svg { transform: scale(1.15); }
-
+.icon-btn svg { width: 24px; height: 24px; }
 .blurred-text { filter: blur(5px); transition: filter 0.3s ease; }
-.blurred-text:hover { filter: blur(0px); }
 
-/* --- SECCIÓN DE AJUSTES --- */
+/* SECCIÓN DE AJUSTES */
 .settings-view { text-align: left; }
-.settings-view h2 { color: var(--text-main); margin-bottom: 20px; text-align: center; font-size: 1.5rem; }
-
+.settings-view h2 { color: var(--text-main); margin-bottom: 20px; text-align: center; }
 .setting-item { margin-bottom: 25px; }
-.setting-item label { 
-    display: block; margin-bottom: 10px; color: var(--text-main); font-weight: bold; 
-}
+.setting-item label { display: block; margin-bottom: 10px; color: var(--text-main); font-weight: bold; }
 
-/* Botones de Modo Claro/Oscuro */
 .mode-selector { display: flex; gap: 10px; }
-.mode-btn { 
-    flex: 1; padding: 10px; background: transparent; 
-    border: 2px solid var(--btn-bg); color: var(--text-muted); 
-}
-.mode-btn.active { 
-    border-color: var(--primary-color); color: var(--text-main); background: var(--btn-bg);
-}
+.mode-btn { flex: 1; padding: 10px; background: transparent; border: 2px solid var(--btn-bg); color: var(--text-muted); }
+.mode-btn.active { border-color: var(--primary-color); color: var(--text-main); background: var(--btn-bg); }
 
-/* Bolitas de Colores */
 .palette-grid { display: flex; gap: 15px; justify-content: center; }
-.palette-circle {
-    width: 45px; height: 45px; border-radius: 50%; cursor: pointer;
-    border: 3px solid transparent; transition: transform 0.2s;
-}
-.palette-circle:hover { transform: scale(1.1); }
+.palette-circle { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; }
 .palette-circle.active { border-color: var(--text-main); }
-
 .bg-green { background-color: #4CAF50; }
 .bg-pink { background-color: #f06292; }
 .bg-blue { background-color: #2196f3; }
 
-.btn-back { width: 100%; margin-top: 15px; }
-
-/* --- DISEÑO RESPONSIVE PARA CELULARES --- */
+/* DISEÑO RESPONSIVE */
 @media (max-width: 600px) {
-    .container { 
-        width: 95%; 
-        /* Aumentamos un poco el espacio superior para que la rueda absoluta no choque con el texto */
-        padding: 45px 20px 20px 20px; 
-    }
-    
-    .settings-trigger { 
-        top: 10px; 
-        right: 15px; /* Mantenemos a la derecha también en móviles */
-    }
-    
+    .container { width: 95%; padding: 25px 20px; }
     h1 { font-size: 1.5rem; }
-    
     .controls { flex-direction: column; }
-    button { width: 100%; padding: 15px; font-size: 1rem; }
+    button { width: 100%; padding: 15px; }
 }
 
 .attribution { margin-top: 25px; font-size: 0.75rem; color: #666; text-align: center; }
-.attribution a { color: #888; text-decoration: none; }
