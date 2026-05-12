@@ -292,15 +292,15 @@ button:disabled {
 
 /* SOLUCIÓN: Links adaptados a tu paleta de color y sin el subrayado por defecto */
 .attribution a { 
-    color: var(--primary-color); 
-    text-decoration: none; 
-    font-weight: 500;
-    transition: color 0.3s ease;
+    color: var(--primary-color) !important; 
+    text-decoration: none !important; 
+    font-weight: 500 !important;
+    transition: color 0.3s ease !important;
 }
 
 .attribution a:hover { 
-    color: var(--primary-hover); 
-    text-decoration: underline; 
+    color: var(--primary-hover) !important; 
+    text-decoration: underline !important; 
 }
 
 /* DISEÑO RESPONSIVE */
