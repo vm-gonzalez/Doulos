@@ -33,13 +33,15 @@
             </header>
 
             <main class="verse-card">
-                <h2 id="verse-ref">Cargando...</h2>
-                <p id="verse-text" class="verse-text">Conectando con la base de datos...</p>
+                <div class="verse-content">
+                    <h2 id="verse-ref">Cargando...</h2>
+                    <p id="verse-text" class="verse-text">Conectando con la base de datos...</p>
+                </div>
             </main>
 
             <div class="controls">
-                <button id="btn-prev" onclick="changeDay(-1)">Anterior</button>
-                <button id="btn-next" onclick="handleNext()">Siguiente / Memorizado</button>
+                <button id="btn-prev" onclick="changeDay(-1)">&lt;</button>
+                <button id="btn-next" onclick="handleNext()">&gt;</button>
             </div>
             
             <div class="progress-bar" style="margin-bottom: 20px;">
@@ -133,17 +135,14 @@
                 .catch(err => console.error('Error cargando versos:', err));
         }
 
-        // --- Funciones de Configuración (Modo y Paleta) ---
         function setMode(mode) {
             currentMode = mode;
             document.body.setAttribute('data-mode', mode);
             localStorage.setItem('appMode', mode);
             
-            // Actualizar botones visuales
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`mode-${mode}`).classList.add('active');
 
-            // Actualizar meta tag (Barra del celular)
             const metaColor = mode === 'light' ? '#f0f2f5' : '#121212';
             document.getElementById('theme-meta').setAttribute('content', metaColor);
         }
@@ -153,7 +152,6 @@
             document.body.setAttribute('data-palette', palette);
             localStorage.setItem('appPalette', palette);
             
-            // Actualizar círculos visuales
             document.querySelectorAll('.palette-circle').forEach(c => c.classList.remove('active'));
             const id = palette === 'default' ? 'pal-default' : palette === 'women' ? 'pal-women' : 'pal-unisex';
             document.getElementById(id).classList.add('active');
@@ -174,17 +172,16 @@
             }
         }
 
-        // --- Lógica de Navegación del Reto ---
         function updateButtons(day) {
             const btnPrev = document.getElementById('btn-prev');
             const btnNext = document.getElementById('btn-next');
             btnPrev.disabled = (day === 1);
             
             if (day === 30) {
-                btnNext.innerText = "¡Completar Reto!";
+                btnNext.innerText = "¡Completar!";
                 btnNext.classList.add('btn-finish');
             } else {
-                btnNext.innerText = "Siguiente / Memorizado";
+                btnNext.innerText = ">"; // Flecha simple para ocupar una sola línea
                 btnNext.classList.remove('btn-finish');
             }
         }
@@ -223,7 +220,6 @@
             document.getElementById('progress').style.width = (day / 30 * 100) + '%';
         }
 
-        // --- Lógica del Botón de Modo Prueba (Ojo) ---
         function toggleBlur() {
             const vt = document.getElementById('verse-text');
             const icon = document.getElementById('eye-icon');
@@ -239,7 +235,6 @@
             document.getElementById('eye-icon').innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
         }
 
-        // Iniciar la app al cargar la página
         initApp();
     </script>
 </body>

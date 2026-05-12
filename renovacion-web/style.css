@@ -61,7 +61,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Cambiado de height a min-height para evitar cortes en pantallas diminutas */
     min-height: 100vh; 
     padding: 20px 0; 
     transition: background-color 0.3s;
@@ -79,7 +78,6 @@ body {
     transition: background-color 0.3s;
 }
 
-/* Cabecera con CSS Grid para un centrado matemático perfecto */
 header {
     margin-bottom: 20px;
 }
@@ -145,17 +143,19 @@ h1 {
     border-left: 4px solid var(--primary-color);
     transition: background-color 0.3s, border-color 0.3s;
     
-    /* SOLUCIÓN: Límite de tamaño y scroll interno */
-    max-height: 45vh; /* Ocupará máximo el 45% del alto de la pantalla */
-    overflow-y: auto; /* Si el texto sobrepasa la altura, se activa el scroll */
+    /* SOLUCIÓN: Altura fija y Flexbox para evitar que el contenedor cambie de tamaño */
+    height: 250px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto; 
 }
 
-/* Personalización elegante de la barra de scroll de la tarjeta */
 .verse-card::-webkit-scrollbar {
     width: 6px;
 }
 .verse-card::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color); /* La barra combina con tu paleta */
+    background-color: var(--primary-color); 
     border-radius: 4px;
 }
 
@@ -176,7 +176,7 @@ h1 {
 .controls {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 20px;
 }
 
@@ -189,6 +189,7 @@ button {
     color: var(--text-main);
     cursor: pointer;
     font-weight: bold;
+    font-size: 1.2rem; /* Tamaño de fuente más grande para las flechas */
     transition: background 0.2s;
 }
 
@@ -268,7 +269,7 @@ button:disabled {
 .setting-item label { display: block; margin-bottom: 10px; color: var(--text-main); font-weight: bold; }
 
 .mode-selector { display: flex; gap: 10px; }
-.mode-btn { flex: 1; padding: 10px; background: transparent; border: 2px solid var(--btn-bg); color: var(--text-muted); }
+.mode-btn { flex: 1; padding: 10px; background: transparent; border: 2px solid var(--btn-bg); color: var(--text-muted); font-size: 1rem; }
 .mode-btn.active { border-color: var(--primary-color); color: var(--text-main); background: var(--btn-bg); }
 
 .palette-grid { display: flex; gap: 15px; justify-content: center; }
@@ -280,7 +281,7 @@ button:disabled {
 .bg-pink { background-color: #f06292; }
 .bg-blue { background-color: #2196f3; }
 
-.btn-back { width: 100%; margin-top: 15px; }
+.btn-back { width: 100%; margin-top: 15px; font-size: 1rem; }
 
 /* --- Footer / Atribución --- */
 .attribution { 
@@ -290,16 +291,16 @@ button:disabled {
     text-align: center; 
 }
 
-/* SOLUCIÓN: Links adaptados a tu paleta de color y sin el subrayado por defecto */
+/* SOLUCIÓN: Links en color gris por defecto, y color de paleta al hacer hover */
 .attribution a { 
-    color: var(--primary-color) !important; 
+    color: var(--text-muted) !important; 
     text-decoration: none !important; 
     font-weight: 500 !important;
     transition: color 0.3s ease !important;
 }
 
 .attribution a:hover { 
-    color: var(--primary-hover) !important; 
+    color: var(--primary-color) !important; 
     text-decoration: underline !important; 
 }
 
@@ -307,6 +308,6 @@ button:disabled {
 @media (max-width: 600px) {
     .container { width: 95%; padding: 25px 20px; }
     h1 { font-size: 1.5rem; }
-    .controls { flex-direction: column; }
-    button { width: 100%; padding: 15px; font-size: 1rem; }
+    /* Eliminada la regla que apilaba los controles, ahora siempre están en una línea */
+    button { padding: 15px; }
 }
