@@ -6,21 +6,22 @@
     <title>Limpiando Tu Mente</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" id="theme-meta" content="#4CAF50">
+    <meta name="theme-color" id="theme-meta" content="#121212">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body data-mode="dark" data-palette="default">
     <div class="container">
-        <button class="settings-trigger" onclick="toggleSettings()" title="Ajustes">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-        </button>
 
         <div id="learning-view">
             <header>
+                <button class="settings-trigger" onclick="toggleSettings()" title="Ajustes">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+
                 <h1>Día <span id="day-number">1</span> de 30</h1>
                 <p class="subtitle">Limpiando tu mente, un día a la vez.</p>
                 <div class="badge">Has completado el reto <span id="completion-counter">0</span> veces</div>
@@ -36,7 +37,7 @@
                 <button id="btn-next" onclick="handleNext()">Siguiente / Memorizado</button>
             </div>
             
-            <div class="progress-bar">
+            <div class="progress-bar" style="margin-bottom: 20px;">
                 <div id="progress" class="progress"></div>
             </div>
 
@@ -49,26 +50,26 @@
         </div>
 
         <div id="settings-view" class="settings-view" style="display: none;">
-            <h2>Ajustes</h2>
+            <h2>Configuración</h2>
             
-            <div class="setting-group">
-                <label>Apariencia</label>
+            <div class="setting-item">
+                <label>Tema (Claro / Oscuro)</label>
                 <div class="mode-selector">
                     <button id="mode-dark" class="mode-btn" onclick="setMode('dark')">Oscuro</button>
                     <button id="mode-light" class="mode-btn" onclick="setMode('light')">Claro</button>
                 </div>
             </div>
 
-            <div class="setting-group">
-                <label>Color de acento</label>
+            <div class="setting-item">
+                <label>Paleta de Colores</label>
                 <div class="palette-grid">
-                    <div id="pal-default" class="palette-card card-green" onclick="setPalette('default')"></div>
-                    <div id="pal-women" class="palette-card card-pink" onclick="setPalette('women')"></div>
-                    <div id="pal-unisex" class="palette-card card-blue" onclick="setPalette('unisex')"></div>
+                    <div id="pal-default" class="palette-circle bg-green" onclick="setPalette('default')" title="Verde"></div>
+                    <div id="pal-women" class="palette-circle bg-pink" onclick="setPalette('women')" title="Rosa"></div>
+                    <div id="pal-unisex" class="palette-circle bg-blue" onclick="setPalette('unisex')" title="Azul"></div>
                 </div>
             </div>
 
-            <button class="btn-back" onclick="toggleSettings()">Guardar y Volver</button>
+            <button class="btn-back" onclick="toggleSettings()">Volver</button>
         </div>
 
         <div id="congrats-view" style="display: none;">
@@ -127,25 +128,30 @@
                 .catch(err => console.error('Error cargando versos:', err));
         }
 
-        // Funciones de Ajustes
+        // --- Funciones de Configuración (Modo y Paleta) ---
         function setMode(mode) {
             currentMode = mode;
             document.body.setAttribute('data-mode', mode);
             localStorage.setItem('appMode', mode);
+            
+            // Actualizar botones visuales
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`mode-${mode}`).classList.add('active');
+
+            // Actualizar meta tag (Barra del celular)
+            const metaColor = mode === 'light' ? '#f0f2f5' : '#121212';
+            document.getElementById('theme-meta').setAttribute('content', metaColor);
         }
 
         function setPalette(palette) {
             currentPalette = palette;
             document.body.setAttribute('data-palette', palette);
             localStorage.setItem('appPalette', palette);
-            document.querySelectorAll('.palette-card').forEach(c => c.classList.remove('active'));
+            
+            // Actualizar círculos visuales
+            document.querySelectorAll('.palette-circle').forEach(c => c.classList.remove('active'));
             const id = palette === 'default' ? 'pal-default' : palette === 'women' ? 'pal-women' : 'pal-unisex';
             document.getElementById(id).classList.add('active');
-
-            const colors = { 'default': '#4CAF50', 'women': '#f06292', 'unisex': '#2196f3' };
-            document.getElementById('theme-meta').setAttribute('content', colors[palette]);
         }
 
         function toggleSettings() {
@@ -163,7 +169,7 @@
             }
         }
 
-        // Lógica de Navegación
+        // --- Lógica de Navegación del Reto ---
         function updateButtons(day) {
             const btnPrev = document.getElementById('btn-prev');
             const btnNext = document.getElementById('btn-next');
@@ -212,7 +218,7 @@
             document.getElementById('progress').style.width = (day / 30 * 100) + '%';
         }
 
-        // Lógica de Modo Prueba (Ojo)
+        // --- Lógica del Botón de Modo Prueba (Ojo) ---
         function toggleBlur() {
             const vt = document.getElementById('verse-text');
             const icon = document.getElementById('eye-icon');
@@ -228,6 +234,7 @@
             document.getElementById('eye-icon').innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
         }
 
+        // Iniciar la app al cargar la página
         initApp();
     </script>
 </body>
