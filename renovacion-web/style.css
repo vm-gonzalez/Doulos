@@ -83,16 +83,14 @@ header {
     margin-bottom: 20px;
 }
 
+/* Cabecera con CSS Grid para un centrado matemático perfecto */
 .header-top {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    /* Divide en 3 columnas: lados iguales (1fr) y el centro se ajusta al texto (auto) */
+    grid-template-columns: 1fr auto 1fr; 
     align-items: center;
     margin-bottom: 5px;
-}
-
-/* El spacer ayuda a que el h1 quede centrado aunque la rueda esté a la derecha */
-.spacer {
-    width: 34px; 
+    width: 100%;
 }
 
 h1 { 
@@ -100,7 +98,7 @@ h1 {
     font-size: 1.8rem; 
     line-height: 1.2; 
     margin: 0;
-    flex-grow: 1;
+    text-align: center; /* Aseguramos que el texto esté centrado en su columna */
 }
 
 .settings-trigger {
@@ -110,6 +108,7 @@ h1 {
     cursor: pointer;
     padding: 5px;
     transition: transform 0.3s ease, color 0.2s;
+    justify-self: end; /* CLAVE: Empuja la ruedita al límite máximo derecho de su columna */
     display: flex;
     align-items: center;
     justify-content: center;
