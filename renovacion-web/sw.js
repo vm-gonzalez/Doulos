@@ -1,5 +1,6 @@
-const CACHE_NAME = 'renovacion-v2';
-// Archivos que se guardarán en la memoria del celular
+// IMPORTANTE: Cambia el número de esta versión (v3, v4, v5...) cada vez que subas cambios a GitHub
+const CACHE_NAME = 'renovacion-v3'; 
+
 const urlsToCache = [
     './',
     './index.html',
@@ -14,6 +15,23 @@ self.addEventListener('install', event => {
             .then(cache => {
                 return cache.addAll(urlsToCache);
             })
+    );
+});
+
+// NUEVO: Activar y borrar la caché antigua
+// Esto asegura que cuando cambies el CACHE_NAME, la versión vieja se borre
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('Borrando caché antigua:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
     );
 });
 
