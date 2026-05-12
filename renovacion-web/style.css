@@ -65,7 +65,6 @@ body {
     transition: background-color 0.3s;
 }
 
-/* El tamaño y diseño de tu caja original */
 .container {
     max-width: 500px;
     width: 90%;
@@ -81,19 +80,23 @@ body {
 header {
     margin-bottom: 20px;
     position: relative; /* Para anclar la ruedita aquí */
+    padding-top: 15px;  /* Espacio para que no choque con la ruedita en PC */
 }
 
 .settings-trigger {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -20px;
+    right: -15px;
     background: transparent;
     border: none;
     color: var(--text-muted);
     cursor: pointer;
-    padding: 5px;
+    padding: 8px;
     transition: transform 0.3s ease, color 0.2s;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .settings-trigger:hover {
@@ -106,7 +109,7 @@ header {
     height: 24px;
 }
 
-h1 { color: var(--text-main); font-size: 1.8rem; }
+h1 { color: var(--text-main); font-size: 1.8rem; line-height: 1.2; }
 .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
 .badge {
@@ -241,7 +244,7 @@ button:disabled:hover {
 .blurred-text { filter: blur(5px); transition: filter 0.3s ease; }
 .blurred-text:hover { filter: blur(0px); }
 
-/* --- SECCIÓN DE AJUSTES (Diseño limpio sin romper el contenedor) --- */
+/* --- SECCIÓN DE AJUSTES --- */
 .settings-view { text-align: left; }
 .settings-view h2 { color: var(--text-main); margin-bottom: 20px; text-align: center; font-size: 1.5rem; }
 
@@ -275,9 +278,16 @@ button:disabled:hover {
 
 .btn-back { width: 100%; margin-top: 15px; }
 
-/* Responsive celular */
+/* --- DISEÑO RESPONSIVE PARA CELULARES --- */
 @media (max-width: 600px) {
     .container { width: 95%; padding: 20px; }
+    
+    /* El fix: Más espacio arriba para que el texto no choque con la rueda */
+    header { padding-top: 25px; } 
+    h1 { font-size: 1.5rem; }
+    
+    .settings-trigger { top: -15px; right: -10px; }
+    
     .controls { flex-direction: column; }
     button { width: 100%; padding: 15px; font-size: 1rem; }
 }
