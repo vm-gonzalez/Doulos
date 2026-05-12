@@ -284,13 +284,13 @@ button:disabled:hover {
 @media (max-width: 600px) {
     .container { 
         width: 95%; 
-        /* En celular, bajamos un poquito más el padding para dar espacio */
-        padding: 35px 20px 20px 20px; 
+        /* Aumentamos un poco el espacio superior para que la rueda absoluta no choque con el texto */
+        padding: 45px 20px 20px 20px; 
     }
     
     .settings-trigger { 
         top: 10px; 
-        right: 10px; 
+        right: 15px; /* Mantenemos a la derecha también en móviles */
     }
     
     h1 { font-size: 1.5rem; }
