@@ -61,9 +61,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; 
+    min-height: 100vh;
+    min-height: 100dvh; /* Añade esto: Soluciona los saltos con la barra de direcciones en móviles */
     padding: 20px 0; 
     transition: background-color 0.3s;
+    overflow-x: hidden; /* Añade esto: Evita que el hover/transform genere scroll horizontal */
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -403,4 +405,12 @@ button:disabled {
     .container { width: 95%; padding: 25px 20px; }
     h1 { font-size: 1.4rem; }
     button { padding: 15px; }
+}
+
+/* Bloquea comportamientos nativos de selección y zoom en los botones */
+.palette-circle, .mode-btn, button, .icon-btn, .settings-trigger {
+    touch-action: manipulation; /* Anula el zoom por doble click rápido */
+    user-select: none; /* Evita seleccionar elementos accidentalmente al hacer clicks rápidos */
+    -webkit-tap-highlight-color: transparent; /* Quita el destello de selección en iOS/Android */
+    outline: none;
 }
