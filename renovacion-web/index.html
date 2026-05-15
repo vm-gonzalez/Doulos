@@ -13,10 +13,59 @@
 <body data-mode="dark" data-palette="default">
     <div class="container">
 
-        <div id="home-view">
+        <div id="welcome-view" style="display: none;">
+            <header class="hero-section">
+                <div class="logo-container">
+                    <img src="icon-192.png" alt="Logo" class="app-logo-large">
+                </div>
+                <h1>Limpiando Tu Mente</h1>
+                <p class="hero-description">
+                    Una herramienta diseñada para ayudarte a memorizar la Palabra de Dios y renovar tus pensamientos, un día a la vez. 
+                    Enfócate en lo que es puro, justo y verdadero.
+                </p>
+                <button onclick="showView('landing-view')" class="btn-primary">Comenzar mi batalla</button>
+            </header>
+        </div>
+
+        <div id="landing-view" style="display: none;">
+            <header class="hero-section">
+                <h1>Acceso</h1>
+                <p class="subtitle" style="margin-bottom: 30px;">Inicia sesión para no perder tu progreso.</p>
+            </header>
+            
+            <div id="login-container" class="auth-forms">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <input type="email" id="login-email" class="auth-input" placeholder="Correo electrónico" required>
+                    <input type="password" id="login-password" class="auth-input" placeholder="Contraseña" required>
+                    <button type="submit" class="btn-primary">Entrar</button>
+                </form>
+                <button onclick="toggleAuthMode()" class="btn-secondary">¿No tienes cuenta? Regístrate</button>
+            </div>
+
+            <div id="register-container" class="auth-forms" style="display: none;">
+                <h2>Crear Cuenta</h2>
+                <form id="register-form" onsubmit="handleRegister(event)">
+                    <input type="email" id="reg-email" class="auth-input" placeholder="Correo electrónico" required>
+                    <input type="password" id="reg-password" class="auth-input" placeholder="Contraseña (Mín. 6 caracteres)" required minlength="6">
+                    <input type="password" id="reg-password-confirm" class="auth-input" placeholder="Confirmar Contraseña" required minlength="6">
+                    <button type="submit" class="btn-primary">Registrarse</button>
+                </form>
+                <button onclick="toggleAuthMode()" class="btn-secondary">Ya tengo cuenta</button>
+            </div>
+            <button onclick="showView('welcome-view')" class="btn-back">Volver</button>
+        </div>
+
+        <div id="home-view" style="display: none;">
             <header>
                 <div class="header-top">
-                    <div class="spacer"></div>
+                    <button class="icon-btn-small" onclick="logout()" title="Cerrar Sesión">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </button>
                     <h1>Elige tu batalla</h1>
                     <button class="settings-trigger" onclick="toggleSettings()" title="Ajustes">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -25,41 +74,43 @@
                         </svg>
                     </button>
                 </div>
-                <p class="subtitle">Limpiando tu mente, un día a la vez.</p>
             </header>
-            
-            <div id="category-list" class="category-grid">
+            <div id="category-list" class="category-grid"></div>
+        </div>
+
+        <div id="days-list-view" style="display: none;">
+            <header>
+                <div class="header-top">
+                    <button class="icon-btn-small" onclick="goHome()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    </button>
+                    <h1 id="days-list-title">Reto</h1>
+                    <div class="spacer"></div>
                 </div>
+                <p class="subtitle">Selecciona un día para meditar</p>
+            </header>
+            <div id="days-container" class="days-vertical-list"></div>
         </div>
 
         <div id="learning-view" style="display: none;">
             <header>
                 <div class="header-top">
-                    <button class="icon-btn-small" onclick="goHome()" title="Volver al inicio">
+                    <button class="icon-btn-small" onclick="showView('days-list-view')" title="Volver a la lista">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="19" y1="12" x2="5" y2="12"></line>
                             <polyline points="12 19 5 12 12 5"></polyline>
                         </svg>
                     </button>
-                    
-                    <h1>Día <span id="day-number">1</span> de <span id="total-days-label">30</span></h1>
-                    
-                    <button class="settings-trigger" onclick="toggleSettings()" title="Ajustes">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                    </button>
+                    <h1>Día <span id="day-number">1</span></h1>
+                    <div class="spacer"></div>
                 </div>
-
-                <p class="subtitle" id="current-challenge-title">Cargando reto...</p>
-                <div class="badge">Reto completado <span id="completion-counter">0</span> veces</div>
+                <p class="subtitle" id="current-challenge-title">Cargando...</p>
             </header>
 
             <main class="verse-card">
                 <div class="verse-content">
-                    <h2 id="verse-ref">Cargando...</h2>
-                    <p id="verse-text" class="verse-text">Conectando con la base de datos...</p>
+                    <h2 id="verse-ref">...</h2>
+                    <p id="verse-text" class="verse-text">Cargando Palabra...</p>
                 </div>
             </main>
 
@@ -67,12 +118,8 @@
                 <button id="btn-prev" onclick="changeDay(-1)">&lt;</button>
                 <button id="btn-next" onclick="handleNext()">&gt;</button>
             </div>
-            
-            <div class="progress-bar" style="margin-bottom: 20px;">
-                <div id="progress" class="progress"></div>
-            </div>
 
-            <button id="btn-blur" class="icon-btn" onclick="toggleBlur()" title="Ocultar/Mostrar texto">
+            <button id="btn-blur" class="icon-btn" onclick="toggleBlur()" style="margin: 0 auto; display: block;">
                 <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
@@ -82,257 +129,284 @@
 
         <div id="settings-view" class="settings-view" style="display: none;">
             <h2>Configuración</h2>
-
             <div class="setting-item">
-                <label>Tema (Claro / Oscuro)</label>
+                <label>Tema</label>
                 <div class="mode-selector">
                     <button id="mode-dark" class="mode-btn" onclick="setMode('dark')">Oscuro</button>
                     <button id="mode-light" class="mode-btn" onclick="setMode('light')">Claro</button>
                 </div>
             </div>
-
             <div class="setting-item">
                 <label>Paleta de Colores</label>
                 <div class="palette-grid">
-                    <div id="pal-default" class="palette-circle bg-green" onclick="setPalette('default')" title="Verde"></div>
-                    <div id="pal-women" class="palette-circle bg-pink" onclick="setPalette('women')" title="Rosa"></div>
-                    <div id="pal-unisex" class="palette-circle bg-blue" onclick="setPalette('unisex')" title="Azul"></div>
+                    <div id="pal-default" class="palette-circle bg-green" onclick="setPalette('default')"></div>
+                    <div id="pal-women" class="palette-circle bg-pink" onclick="setPalette('women')"></div>
+                    <div id="pal-unisex" class="palette-circle bg-blue" onclick="setPalette('unisex')"></div>
                 </div>
             </div>
-
             <button class="btn-back" onclick="toggleSettings()">Volver</button>
         </div>
 
         <div id="congrats-view" style="display: none;">
             <main class="verse-card congrats-card">
-                <h2>¡Felicidades! 🎉</h2>
-                <p id="congrats-text" class="verse-text">Has completado los días de renovación mental. La constancia es clave en esta lucha.</p>
-                <button onclick="restartChallenge()" class="btn-restart">Volver a empezar (Día 1)</button>
-                <button onclick="goHome()" class="btn-back" style="background: transparent; color: var(--text-main); margin-top: 10px;">Volver al Menú</button>
+                <h2>¡Victoria! 🎉</h2>
+                <p class="verse-text">Has completado el ciclo de renovación. La constancia transforma el corazón.</p>
+                <button onclick="goHome()" class="btn-restart">Volver al Menú</button>
             </main>
         </div>
 
-        <footer class="attribution">
-            Ícono creado por <a href="https://www.flaticon.es/autores/freepik" target="_blank" rel="noopener noreferrer">Freepik</a> de <a href="https://www.flaticon.es/" target="_blank" rel="noopener noreferrer">Flaticon</a>
-        </footer>
     </div>
 
     <script>
-        // Registrar Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log('Error SW', err));
-            });
-        }
+        const API_BASE_URL = 'http://localhost:3000'; // Backend Rails
 
-        // Variables de estado
         let globalData = null;
         let currentCategory = null;
         let currentDay = 1;
-        let completions = 0;
         let totalDays = 30;
         let currentMode = localStorage.getItem('appMode') || 'dark';
         let currentPalette = localStorage.getItem('appPalette') || 'default';
         let previousView = 'home-view';
 
-        // Inicialización
         function initApp() {
             setMode(currentMode);
             setPalette(currentPalette);
             
-            // Cargar los datos una sola vez al inicio
             fetch('verses.json')
                 .then(response => response.json())
                 .then(data => {
                     globalData = data;
-                    renderHome();
+                    checkAuthStatus();
                 })
                 .catch(err => console.error('Error cargando versos:', err));
         }
 
-        // Dibuja las tarjetas en la pantalla principal
+        // --- AUTH LOGIC ---
+        function checkAuthStatus() {
+            const token = localStorage.getItem('jwt_token');
+            if (token) {
+                renderHome();
+                showView('home-view');
+            } else {
+                showView('welcome-view');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const password_confirmation = document.getElementById('reg-password-confirm').value;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, password_confirmation })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('jwt_token', data.token);
+                    checkAuthStatus();
+                } else {
+                    alert('Error: ' + (data.errors ? data.errors.join(', ') : 'Error en registro'));
+                }
+            } catch (err) { alert('No hay conexión con el servidor.'); }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('jwt_token', data.token);
+                    checkAuthStatus();
+                } else { alert('Credenciales incorrectas'); }
+            } catch (err) { alert('No hay conexión con el servidor.'); }
+        }
+
+        function logout() {
+            localStorage.removeItem('jwt_token');
+            showView('welcome-view');
+        }
+
+        function toggleAuthMode() {
+            const login = document.getElementById('login-container');
+            const reg = document.getElementById('register-container');
+            login.style.display = login.style.display === 'none' ? 'block' : 'none';
+            reg.style.display = reg.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // --- NAVEGACIÓN ---
+        function showView(viewId) {
+            const views = ['welcome-view', 'landing-view', 'home-view', 'days-list-view', 'learning-view', 'settings-view', 'congrats-view'];
+            views.forEach(v => document.getElementById(v).style.display = 'none');
+            document.getElementById(viewId).style.display = 'block';
+            if (!['settings-view', 'landing-view', 'welcome-view'].includes(viewId)) previousView = viewId;
+        }
+
+        // --- RENDER DE VISTAS PRINCIPALES ---
         function renderHome() {
             const list = document.getElementById('category-list');
-            list.innerHTML = ''; // Limpiar lista
-            
+            list.innerHTML = ''; 
             for (const key in globalData) {
                 const category = globalData[key];
                 const btn = document.createElement('div');
                 btn.className = 'category-card';
                 btn.onclick = () => startChallenge(key);
                 
-                let day = parseInt(localStorage.getItem(`verseDay_${key}`)) || 1;
-                let comps = parseInt(localStorage.getItem(`verseCompletions_${key}`)) || 0;
+                // Obtenemos los días completados en forma de Array
+                let completedDays = JSON.parse(localStorage.getItem(`completed_${key}`)) || [];
                 let total = Object.keys(category.versos).length;
-                
-                // Si el día supera el total (por error de guardado previo), ajustarlo
-                if(day > total) day = total;
+                let percent = (completedDays.length / total) * 100;
 
                 btn.innerHTML = `
-                    <div class="card-header">
-                        <h3>${category.nombre}</h3>
-                        ${comps > 0 ? `<span class="badge-small" title="Victorias">🏆 ${comps}</span>` : ''}
-                    </div>
+                    <div class="card-header"><h3>${category.nombre}</h3></div>
                     <div class="card-progress">
-                        <div class="progress-bar-small">
-                            <div class="progress-small" style="width: ${(day / total) * 100}%"></div>
-                        </div>
-                        <p>Día ${day} de ${total}</p>
+                        <div class="progress-bar-small"><div class="progress-small" style="width: ${percent}%"></div></div>
+                        <p>${completedDays.length} de ${total} completados</p>
                     </div>
                 `;
                 list.appendChild(btn);
             }
         }
 
-        // Inicia o continúa una categoría seleccionada
         function startChallenge(categoryId) {
             currentCategory = categoryId;
-            currentDay = parseInt(localStorage.getItem(`verseDay_${currentCategory}`)) || 1;
-            completions = parseInt(localStorage.getItem(`verseCompletions_${currentCategory}`)) || 0;
-            
-            document.getElementById('completion-counter').innerText = completions;
-            loadVerseData();
-            showView('learning-view');
+            renderDaysList(categoryId);
+            showView('days-list-view');
         }
 
-        // Carga los datos del versículo actual en la pantalla
-        function loadVerseData() {
-            if (!globalData || !currentCategory) return;
+        // --- LISTA DE 30 DÍAS (MARCAR/DESMARCAR) ---
+        function renderDaysList(categoryId) {
+            const categoryData = globalData[categoryId];
+            document.getElementById('days-list-title').innerText = categoryData.nombre;
+            const container = document.getElementById('days-container');
+            container.innerHTML = '';
+
+            const total = Object.keys(categoryData.versos).length;
+            let completedDays = JSON.parse(localStorage.getItem(`completed_${categoryId}`)) || [];
+
+            for (let i = 1; i <= total; i++) {
+                const isCompleted = completedDays.includes(i);
+                const row = document.createElement('div');
+                row.className = 'day-row';
+                
+                // Click en la fila (Abre el versículo)
+                row.onclick = () => {
+                    currentDay = i;
+                    loadVerseData();
+                    showView('learning-view');
+                };
+
+                row.innerHTML = `
+                    <div class="day-check-circle ${isCompleted ? 'completed' : ''}" onclick="toggleDayCompletion(event, '${categoryId}', ${i})">
+                        ${isCompleted ? '✓' : i}
+                    </div>
+                    <div class="day-label">${categoryData.nombre.toUpperCase()} ${i}</div>
+                    <div class="day-chevron">›</div>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        // Marcar o desmarcar el círculo
+        function toggleDayCompletion(event, categoryId, day) {
+            event.stopPropagation(); // Evita que se abra el versículo
             
+            let completedDays = JSON.parse(localStorage.getItem(`completed_${categoryId}`)) || [];
+            const index = completedDays.indexOf(day);
+            
+            if (index > -1) {
+                completedDays.splice(index, 1); // Desmarcar
+            } else {
+                completedDays.push(day); // Marcar
+            }
+            
+            localStorage.setItem(`completed_${categoryId}`, JSON.stringify(completedDays));
+            renderDaysList(categoryId); // Refresca la lista
+        }
+
+        // --- LEARNING VIEW (VERSÍCULOS) ---
+        function loadVerseData() {
             const categoryData = globalData[currentCategory];
             const verses = categoryData.versos;
             totalDays = Object.keys(verses).length;
             
             document.getElementById('current-challenge-title').innerText = categoryData.nombre;
-            document.getElementById('total-days-label').innerText = totalDays;
-
-            let dayStr = currentDay.toString();
-            if (verses[dayStr]) {
-                document.getElementById('day-number').innerText = currentDay;
-                document.getElementById('verse-ref').innerText = verses[dayStr].cita;
-                document.getElementById('verse-text').innerText = `"${verses[dayStr].texto}"`;
-                document.getElementById('verse-text').classList.remove('blurred-text');
-                resetEyeIcon(); 
-                updateProgress(currentDay);
-                updateButtons(currentDay);
-            } else {
-                // Prevención de errores si el día guardado no existe
-                currentDay = 1;
-                localStorage.setItem(`verseDay_${currentCategory}`, 1);
-                loadVerseData();
-            }
-        }
-
-        function goHome() {
-            renderHome(); // Refrescar el progreso visual
-            showView('home-view');
-        }
-
-        function showView(viewId) {
-            document.getElementById('home-view').style.display = 'none';
-            document.getElementById('learning-view').style.display = 'none';
-            document.getElementById('settings-view').style.display = 'none';
-            document.getElementById('congrats-view').style.display = 'none';
-            
-            document.getElementById(viewId).style.display = 'block';
-            
-            if (viewId !== 'settings-view') {
-                previousView = viewId;
-            }
-        }
-
-        function toggleSettings() {
-            const settings = document.getElementById('settings-view');
-            if (settings.style.display === 'none' || settings.style.display === '') {
-                showView('settings-view');
-            } else {
-                showView(previousView);
-            }
-        }
-
-        // Temas y Paletas
-        function setMode(mode) {
-            currentMode = mode;
-            document.body.setAttribute('data-mode', mode);
-            localStorage.setItem('appMode', mode);
-            
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`mode-${mode}`).classList.add('active');
-
-            const metaColor = mode === 'light' ? '#f0f2f5' : '#121212';
-            document.getElementById('theme-meta').setAttribute('content', metaColor);
-        }
-
-        function setPalette(palette) {
-            currentPalette = palette;
-            document.body.setAttribute('data-palette', palette);
-            localStorage.setItem('appPalette', palette);
-            
-            document.querySelectorAll('.palette-circle').forEach(c => c.classList.remove('active'));
-            const id = palette === 'default' ? 'pal-default' : palette === 'women' ? 'pal-women' : 'pal-unisex';
-            document.getElementById(id).classList.add('active');
-        }
-
-        // Navegación de días
-        function updateButtons(day) {
-            const btnPrev = document.getElementById('btn-prev');
-            const btnNext = document.getElementById('btn-next');
-            btnPrev.disabled = (day === 1);
-            
-            if (day === totalDays) {
-                btnNext.innerText = "¡Completar!";
-                btnNext.classList.add('btn-finish');
-            } else {
-                btnNext.innerText = ">"; 
-                btnNext.classList.remove('btn-finish');
-            }
-        }
-
-        function handleNext() {
-            if (currentDay === totalDays) showCongrats();
-            else changeDay(1);
+            document.getElementById('day-number').innerText = currentDay;
+            document.getElementById('verse-ref').innerText = verses[currentDay].cita;
+            document.getElementById('verse-text').innerText = `"${verses[currentDay].texto}"`;
+            document.getElementById('verse-text').classList.remove('blurred-text');
+            resetEyeIcon();
+            updateButtons(currentDay);
         }
 
         function changeDay(step) {
             let newDay = currentDay + step;
             if (newDay >= 1 && newDay <= totalDays) {
                 currentDay = newDay;
-                localStorage.setItem(`verseDay_${currentCategory}`, currentDay);
                 loadVerseData();
             }
         }
 
-        function showCongrats() {
-            showView('congrats-view');
-            completions++;
-            localStorage.setItem(`verseCompletions_${currentCategory}`, completions);
-            document.getElementById('completion-counter').innerText = completions;
+        function handleNext() {
+            // Marcar completado automáticamente al avanzar
+            let completedDays = JSON.parse(localStorage.getItem(`completed_${currentCategory}`)) || [];
+            if (!completedDays.includes(currentDay)) {
+                completedDays.push(currentDay);
+                localStorage.setItem(`completed_${currentCategory}`, JSON.stringify(completedDays));
+            }
+
+            if (currentDay === totalDays) {
+                showView('congrats-view');
+            } else {
+                changeDay(1);
+            }
         }
 
-        function restartChallenge() {
-            currentDay = 1;
-            localStorage.setItem(`verseDay_${currentCategory}`, 1);
-            loadVerseData();
-            showView('learning-view');
-        }
-
-        function updateProgress(day) {
-            document.getElementById('progress').style.width = (day / totalDays * 100) + '%';
+        function updateButtons(day) {
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            btnPrev.disabled = (day === 1);
+            btnNext.innerText = (day === totalDays) ? "¡Terminar!" : ">";
+            btnNext.classList.toggle('btn-finish', day === totalDays);
         }
 
         function toggleBlur() {
             const vt = document.getElementById('verse-text');
-            const icon = document.getElementById('eye-icon');
             vt.classList.toggle('blurred-text');
-            if (vt.classList.contains('blurred-text')) {
-                icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
-            } else {
-                resetEyeIcon();
-            }
+            document.getElementById('eye-icon').innerHTML = vt.classList.contains('blurred-text') 
+                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`
+                : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
         }
 
-        function resetEyeIcon() {
-            document.getElementById('eye-icon').innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
+        function resetEyeIcon() { document.getElementById('eye-icon').innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`; }
+
+        // --- UTILIDADES ---
+        function goHome() { renderHome(); showView('home-view'); }
+        function toggleSettings() { showView(document.getElementById('settings-view').style.display === 'none' ? 'settings-view' : previousView); }
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.body.setAttribute('data-mode', mode);
+            localStorage.setItem('appMode', mode);
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.id === `mode-${mode}`));
+        }
+
+        function setPalette(palette) {
+            currentPalette = palette;
+            document.body.setAttribute('data-palette', palette);
+            localStorage.setItem('appPalette', palette);
+            document.querySelectorAll('.palette-circle').forEach(c => c.classList.toggle('active', c.id === `pal-${palette === 'default' ? 'default' : palette}`));
         }
 
         initApp();
